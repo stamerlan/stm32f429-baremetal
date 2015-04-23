@@ -29,13 +29,17 @@ typedef unsigned int uint16_t;
 /* Peripheral map */
 #define APB1PERIPH_BASE	0x40000000
 #define AHB1PERIPH_BASE	0x40020000
+#define AHB2PERIPH_BASE	0x50000000
 
 #define TIM6_BASE	(APB1PERIPH_BASE + 0x1000)
 #define PWR_BASE	(APB1PERIPH_BASE + 0x7000)
 
+#define GPIOA_BASE	(AHB1PERIPH_BASE + 0x0000)
 #define GPIOG_BASE	(AHB1PERIPH_BASE + 0x1800)
 #define RCC_BASE	(AHB1PERIPH_BASE + 0x3800)
 #define FLASH_BASE	(AHB1PERIPH_BASE + 0x3C00)
+
+#define RNG_BASE	(AHB2PERIPH_BASE + 0x060800)
 
 /* TIM6: Basic timer */
 /* TIM6 control register 1 */
@@ -90,12 +94,26 @@ typedef unsigned int uint16_t;
 #define GPIO_PUPDR_NO		0
 #define GPIO_PUPDR_UP		1
 #define GPIO_PUPDR_DOWN		2
+/* GPIOA port mode register */
+#define GPIOA_MODER	(*(volatile uint32_t *)(GPIOA_BASE + 0x00))
+/* GPIOA port putput type register */
+#define GPIOA_OTYPER	(*(volatile uint32_t *)(GPIOA_BASE + 0x04))
+/* GPIOA port output speed register */
+#define GPIOA_OSPEEDR	(*(volatile uint32_t *)(GPIOA_BASE + 0x08))
+/* GPIOA port input data register */
+#define GPIOA_IDR	(*(volatile uint32_t *)(GPIOA_BASE + 0x10))
+/* GPIOA port pull-up/pull-down register */
+#define GPIOA_PUPDR	(*(volatile uint32_t *)(GPIOA_BASE + 0x0C))
+/* GPIOA port output data register */
+#define GPIOA_ODR	(*(volatile uint32_t *)(GPIOA_BASE + 0x14))
 /* GPIOG port mode register */
 #define GPIOG_MODER	(*(volatile uint32_t *)(GPIOG_BASE + 0x00))
 /* GPIOG port putput type register */
 #define GPIOG_OTYPER	(*(volatile uint32_t *)(GPIOG_BASE + 0x04))
 /* GPIOG port output speed register */
 #define GPIOG_OSPEEDR	(*(volatile uint32_t *)(GPIOG_BASE + 0x08))
+/* GPIOG port input data register */
+#define GPIOG_IDR	(*(volatile uint32_t *)(GPIOG_BASE + 0x10))
 /* GPIOG port pull-up/pull-down register */
 #define GPIOG_PUPDR	(*(volatile uint32_t *)(GPIOG_BASE + 0x0C))
 /* GPIOG port output data register */
@@ -267,6 +285,24 @@ typedef unsigned int uint16_t;
 #define RCC_AHB1ENR_CCMDATARAMEN	20
 #define RCC_AHB1ENR_CCMDATARAMEN_MASK	(1 << RCC_AHB1ENR_CCMDATARAMEN)
 
+/* RCC AHB2 peripheral clock enable register */
+#define RCC_AHB2ENR		(*(volatile uint32_t *)(RCC_BASE + 0x34))
+
+#define RCC_AHB2ENR_DCMIEN	0
+#define RCC_AHB2ENR_DCMIEN_MASK	(1 << RCC_AHB2ENR_DCMIEN)
+
+#define RCC_AHB2ENR_CRYPEN	4
+#define RCC_AHB2ENR_CRYPEN_MASK	(1 << RCC_AHB2ENR_CRYPEN)
+
+#define RCC_AHB2ENR_HASHEN	5
+#define RCC_AHB2ENR_HASHEN_MASK	(1 << RCC_AHB2ENR_HASHEN)
+
+#define RCC_AHB2ENR_RNGEN	6
+#define RCC_AHB2ENR_RNGEN_MASK	(1 << RCC_AHB2ENR_RNGEN)
+
+#define RCC_AHB2ENR_OTGFSEN	7
+#define RCC_AHB2ENR_OTGFSEN_MASK	(1 << RCC_AHB2ENR_OTGFSEN)
+
 /* RCC ABP1 peripheral clock enable register */
 #define RCC_APB1ENR		(*(volatile uint32_t *)(RCC_BASE + 0x40))
 
@@ -366,6 +402,37 @@ typedef unsigned int uint16_t;
 
 #define FLASH_ACR_DCRST		12
 #define FLASH_ACR_DCRST_MASK	(1 << FLASH_ACR_DCRST)
+
+/* RNG: Random number generator registers */
+/* RNG control register */
+#define RNG_CR			(*(volatile uint32_t *)(RNG_BASE + 0x00))
+
+#define RNG_CR_RNGEN		2
+#define RNG_CR_RNGEN_MASK	(1 << RNG_CR_RNGEN)
+
+#define RNG_CR_IE		3
+#define RNG_CR_IE_MASK		(1 << RNG_CR_IE)
+
+/* RNG status register */
+#define RNG_SR			(*(volatile uint32_t *)(RNG_BASE + 0x04))
+
+#define RNG_SR_DRDY		0
+#define RNG_SR_DRDY_MASK	(1 << RNG_SR_DRDY)
+
+#define RNG_SR_CECS		1
+#define RNG_SR_CECS_MASK	(1 << RNG_SR_CECS)
+
+#define RNG_SR_SECS		2
+#define RNG_SR_SECS_MASK	(1 << RNG_SR_SECS)
+
+#define RNG_SR_CEIS		5
+#define RNG_SR_CEIS_MASK	(1 << RNG_SR_CEIS)
+
+#define RNG_SR_SEIS		6
+#define RNG_SR_SEIS_MASK	(1 << RNG_SR_SEIS)
+
+/* RNG data register */
+#define RNG_DR			(*(volatile uint32_t *)(RNG_BASE + 0x08))
 
 #endif /* REGISTERS_H */
 
