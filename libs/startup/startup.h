@@ -15,7 +15,7 @@
  *  - debug_monitor
  *  - pend_sv
  *  - systick
- * Also you need to specify stack pointer as _estack symbol
+ * Also you need to specify stack pointer as _estack symbol.
  */
 
 #ifndef STARTUP_H
