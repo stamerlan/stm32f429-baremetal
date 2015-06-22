@@ -14,14 +14,14 @@ extern void *_estack;
 extern void main(void);
 
 /* TODO: I dislike to describe all interrupt handlers here */
-extern void systick(void);
+//extern void systick(void);
+//
+//static void loop(void)
+//{
+//	for (;;);
+//}
 
-static void loop(void)
-{
-	for (;;);
-}
-
-static void cstart(void)
+static int cstart(void)
 {
 	int *nvdata = (int *)&_etext;
 	int *data = (int *)&_sdata;
@@ -36,9 +36,11 @@ static void cstart(void)
 	while (data < (int *)&_ebss) {
 		*(data++) = 0;
 	}
+
+	return 0;
 }
 
-static void clocks(void)
+static int clocks(void)
 {
 	volatile int startup_counter = 0;
 
@@ -57,7 +59,7 @@ static void clocks(void)
 		 (startup_counter != HSE_STARTUP_TIMEOUT));
 
 	if (startup_counter == HSE_STARTUP_TIMEOUT)
-		loop();
+		return -1;	
 	RCC_APB1ENR |= 1 << RCC_APB1ENR_PWREN;
 	PWR_CR |= 0x3 << PWR_CR_VOS;
 
@@ -91,30 +93,35 @@ static void clocks(void)
 			RCC_CFGR_SWS_PLL);
 
 	RCC_AHB1ENR |= 1 << RCC_AHB1ENR_CCMDATARAMEN;
+
+	return 0;
 }
 
 void reset(void)
 {
-	cstart();
-	clocks();
+	if (cstart())
+		goto loop;
+	if (clocks())
+		goto loop;
 
 	main();
 
+ loop:
 	for (;;);
 }
 
-void *vector_table[] __attribute__((section(".vectors"))) = {
-	[0x00] = &_estack,
-	[0x01] = (void *)reset,		/* Reset */
-	[0x02] = (void *)loop,		/* NMI */
-	[0x03] = (void *)loop,		/* HardFault */
-	[0x04] = (void *)loop,		/* MemManage */
-	[0x05] = (void *)loop,		/* BusFault */
-	[0x06] = (void *)loop,		/* UsageFault */
-	[0x0B] = (void *)loop,		/* SVCall */
-	[0x0C] = (void *)loop,		/* Debug Monitor */
-	[0x0D] = (void *)loop,		/* Reserved */
-	[0x0E] = (void *)loop,		/* RendSV */
-	[0x0F] = (void *)systick,	/* Systick */
-};
+//void *vector_table[] __attribute__((section(".vectors"))) = {
+//	[0x00] = &_estack,
+//	[0x01] = (void *)reset,		/* Reset */
+//	[0x02] = (void *)loop,		/* NMI */
+//	[0x03] = (void *)loop,		/* HardFault */
+//	[0x04] = (void *)loop,		/* MemManage */
+//	[0x05] = (void *)loop,		/* BusFault */
+//	[0x06] = (void *)loop,		/* UsageFault */
+//	[0x0B] = (void *)loop,		/* SVCall */
+//	[0x0C] = (void *)loop,		/* Debug Monitor */
+//	[0x0D] = (void *)loop,		/* Reserved */
+//	[0x0E] = (void *)loop,		/* RendSV */
+//	[0x0F] = (void *)systick,	/* Systick */
+//};
 
