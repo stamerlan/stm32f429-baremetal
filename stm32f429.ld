@@ -1,7 +1,6 @@
 ENTRY(reset)
 
-/*_estack = 0x20030000;*/	/* end of 192K RAM */
-_estack = 0x20010000;
+_estack = 0x10010000;	/* end of CCM */
 
 _Min_Heap_Size = 0;
 _Min_Stack_Size = 0x400;

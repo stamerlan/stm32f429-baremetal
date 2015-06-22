@@ -13,14 +13,6 @@ extern void *_estack;
 
 extern void main(void);
 
-/* TODO: I dislike to describe all interrupt handlers here */
-//extern void systick(void);
-//
-//static void loop(void)
-//{
-//	for (;;);
-//}
-
 static int cstart(void)
 {
 	int *nvdata = (int *)&_etext;
@@ -109,19 +101,4 @@ void reset(void)
  loop:
 	for (;;);
 }
-
-//void *vector_table[] __attribute__((section(".vectors"))) = {
-//	[0x00] = &_estack,
-//	[0x01] = (void *)reset,		/* Reset */
-//	[0x02] = (void *)loop,		/* NMI */
-//	[0x03] = (void *)loop,		/* HardFault */
-//	[0x04] = (void *)loop,		/* MemManage */
-//	[0x05] = (void *)loop,		/* BusFault */
-//	[0x06] = (void *)loop,		/* UsageFault */
-//	[0x0B] = (void *)loop,		/* SVCall */
-//	[0x0C] = (void *)loop,		/* Debug Monitor */
-//	[0x0D] = (void *)loop,		/* Reserved */
-//	[0x0E] = (void *)loop,		/* RendSV */
-//	[0x0F] = (void *)systick,	/* Systick */
-//};
 
